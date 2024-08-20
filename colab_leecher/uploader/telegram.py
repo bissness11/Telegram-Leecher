@@ -61,30 +61,30 @@ async def upload_file(file_path, real_name):
             )
 
         elif f_type == "audio":
-            thmb_path = None if not ospath.exists(Paths.THMB_PATH) else Paths.THMB_PATH
-            MSG.sent_msg = await MSG.sent_msg.reply_audio(
-                audio=file_path,
-                caption=caption,
-                thumb=thmb_path,  # type: ignore
-                progress=progress_bar,
-                reply_to_message_id=MSG.sent_msg.id,
-            )
+            thmb_path = None if not ospath.exists(Paths.THMB_PATH) else Paths.THMB_PATH
+            MSG.sent_msg = await MSG.sent_msg.reply_audio(
+                audio=file_path,
+                caption=caption,
+                thumb=thmb_path if thmb_path is not None else None,  # Check for None before assigning
+                progress=progress_bar,
+                reply_to_message_id=MSG.sent_msg.id,
+            )
 
-        elif f_type == "document":
-            if ospath.exists(Paths.THMB_PATH):
-                thmb_path = Paths.THMB_PATH
-            elif type_ == "video":
-                thmb_path, _ = thumbMaintainer(file_path)
-            else:
-                thmb_path = None
+        elif f_type == "document":
+            if ospath.exists(Paths.THMB_PATH):
+                thmb_path = Paths.THMB_PATH
+            elif type_ == "video":
+                thmb_path, _ = thumbMaintainer(file_path)
+            else:
+                thmb_path = None
 
-            MSG.sent_msg = await MSG.sent_msg.reply_document(
-                document=file_path,
-                caption=caption,
-                thumb=thmb_path,  # type: ignore
-                progress=progress_bar,
-                reply_to_message_id=MSG.sent_msg.id,
-            )
+            MSG.sent_msg = await MSG.sent_msg.reply_document(
+                document=file_path,
+                caption=caption,
+                thumb=thmb_path if thmb_path is not None else None,  # Check for None before assigning
+                progress=progress_bar,
+                reply_to_message_id=MSG.sent_msg.id,
+            )
 
         elif f_type == "photo":
             MSG.sent_msg = await MSG.sent_msg.reply_photo(
